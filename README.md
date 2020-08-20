@@ -1,12 +1,25 @@
-### Python Programming in Water Resources Engineering and Research
+### Python Programming for Water Resources Engineering and Research
+
+![flood](https://github.com/hydro-informatics/hydro-informatics.github.io/raw/master/images/hw-aibling.jpg)
+*<sub>Flood at the Mangfall River in Bavaria (source: KSS 2020).</sub>*
 
 ***
 
 ## Exercise: Calculate flood return periods
 
->	***Background***: Use a series of discharges to calculate the return period of legally and statistically relevant flood flows using *pandas* and *numpy*.
+>	***Background***: Use a series of discharges to calculate the return period of legally and statistically relevant flood flows using *pandas*.
 
 >   ***Goals***: Load custom modules and functions in a script. Open comma-type delimited files and manipulate files with *pandas*.
+
+>   ***Requirements***: *Python* libraries: *pandas* and *matplotlib*. Understand data handling with [*pandas*](https://hydro-informatics.github.io/hypy_pynum.html).
+
+Get ready by cloning the exercise repository:
+
+```
+git clone https://github.com/Ecohydraulics/Exercise-FloodReturn.git
+```
+
+
 
 ### Terminology
 Flood frequency analysis uses series of discharge data (e.g., from a gauging station) and evaluates the occurrence probability of a particular discharge. Thus, the occurrence probability defines the frequency of a discharge, which is important for two reasons:
