@@ -143,7 +143,6 @@ plot_q_return_period(annual_max_df_sorted)
 > ***Note***: The plot functions only work if the probability column is named `"pr"`, the return period column is named `"return-period"`, and the discharge column is named `"Q (CMS)"` (otherwise, consider renaming the data frame column header names or modifying the plot functions).
 
 
-
 ## Outside the box
 
 This is only interpolation. For extrapolating return periods beyond the length of the observation period (e.g., for extreme events such as a 1000-year flood), a prediction model is necessary (e.g., Gumbel distributed-extrapolation).
@@ -153,8 +152,8 @@ After all, there is already a software that calculates return periods, freely av
 
 -------------- -----------------------------------------
 **HOMEWORK:**  Use the formulae in the provided workbook 
-                (ILIAS) to implement the Gumbel 
-                distribution for extrapolating a 
+                (ILIAS) to implement another distribution than *Weibull* (e.g., a *Gumbel* 
+                distribution) for extrapolating a 
                 200, 500, and 1000-years flood.
                 Interpolations discharges of 2, 5, 10, 
                 20, and 50-year flow events.
