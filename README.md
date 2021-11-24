@@ -1,6 +1,6 @@
 ### Python Programming for Water Resources Engineering and Research
 
-![flood](https://github.com/hydro-informatics/hydro-informatics.github.io/raw/master/images/hw-aibling.jpg)
+![flood](https://hydro-informatics.com/_images/hw-aibling.jpg)
 *<sub>Flood at the Mangfall River in Bavaria (source: KSS 2020).</sub>*
 
 ***
