@@ -28,8 +28,8 @@ Flood frequency analysis uses series of discharge data (e.g., from a gauging sta
 1. Ecohydraulics: In arid areas in particular, it is important to know how long certain discharges fall below certain levels, where many aquatic habitats may not be deep enough, too hot, or disconnected from the main channel. Therefore, we want to know the *exceedance probability* of a given discharge.
 
 The relationship between the exceedance probability and the recurrence interval results from the definition of both terms:
-* The **exceedance probability** is the likelihood of an event of a certain magnitude (in m³/s or cfs) or higher. 
-* The **recurrence interval** is the inverse of the exceedance probability and expresses the average return period of an event of a certain magnitude in units of time. 
+* The **exceedance probability** is the likelihood of an event of a certain magnitude (in m³/s or cfs) or higher.
+* The **recurrence interval** is the inverse of the exceedance probability and expresses the average return period of an event of a certain magnitude in units of time.
 
 The calculation concept of the return period makes two elementary assumptions. First, it is assumed that the individual flow events have a stationary peak. Second, statistical independence of individual events is assumed. The assumption of statistical independence means that this year a 100-year flood occurs with the same probability as next year, regardless of whether or not a 100-year flood actually occurred this year. Thus, for any given year, the probability of a 100-year flood occurring is 1/100 (or 1/50 for a 50-year flood and so on).
 
@@ -57,20 +57,20 @@ Flow data can be retrieved from gauging stations. In Germany, the ["Gewässerkun
 * A general *US*-borne interface for loading flow data and statistics comes with the [`hydrofunctions` *Python* library](https://hydrofunctions.readthedocs.io/) provided by the United States Geological Survey *USGS*. This library enables to directly get gauge data and statistics based on a stream gauge ID. For example `output = hydrofunctions.peaks("01541200")` <br>To install `hydrofunctions` in a *conda* environment, type `conda install -c conda-forge hydrofunctions` in [*Anaconda Prompt*](https://hydro-informatics.github.io/hypy_install.html#install-pckg). Example usage:<br>`import hydrofunctions as hf`<br>`hf.draw_map()` (only runs in *JupyterLab*)
 
 ### Load data in with *pandas*
-Create a new *Python* file (e.g., `discharge_analysis.py`) and import *pandas* as `pd` at the beginning. Read the provided flow data series file `"Wasserburg_Inn_6343100_Q_Day.csv"` with `pd.read_csv`.
+Create a new *Python* file (e.g., `discharge_analysis.py`) and import *pandas* as `pd` at the beginning. Read the provided flow data series file `"daily-flow-series.csv"` with `pd.read_csv`.
 The header (column names) is in row 36, but we do not use the column names from the *csv* file and overwrite them with the `names` argument (`"Date"` and `"Q (CMS)"` (for Cubic Meters per Second)). Alternatively, we could use the `skiprows` argument to indicate where the data content starts in the file.
 With `sep=";"`, we indicate that columns are separated by a semicolon. The `usecols=[0, 2]` argument specifies that we only want to read column 0 (date) and 2 (discharge) because the information content of column 1 (time) is not relevant for daily discharge. The `parse_dates=[0]` argument lets *pandas* know that column 0 contains date-formatted values. Alternatively, we could use a `dtype={"Date": ... }` dictionary to specify the data formats of columns. However, using `dtype` would require importing `datetime` and induce unnecessary complexity. In addition, the `index_col` arguments defines the column indices, which need to have date format for the later analyses.
 
 ```python
 import pandas as pd
-df = pd.read_csv("flow-data/Wasserburg_Inn_6343100_Q_Day.csv",
+df = pd.read_csv("flow-data/daily-flow-series.csv",
                  header=36,
                  sep=";",
                  names=["Date", "Q (CMS)"],
                  usecols=[0, 2],
                  parse_dates=[0],
                  index_col=["Date"])
-``` 
+```
 
 Did everything work? Verify the loaded `data_series` with `print(data_series.head())`
 
@@ -81,13 +81,13 @@ Plotting data is not the focus of this exercise and for this reason, there is a 
 ```python
 from plot_discharge import plot_discharge
 plot_discharge(df.index, df["Q (CMS)"], title="Wasserburg a. Inn 1826 - 2016")
-``` 
+```
 
 On a side note, `plot_discharge` uses the [`matplotlib` library](https://hydro-informatics.github.io/hypy_pyplot.html#matplotlib).
 
 
 ## Construct series of annual maximum discharge
-Flood event recurrence intervals result from statistics of the annual maximum discharge. Therefore, use [*pandas*' `resample`](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.resample.html) function to find annual maximum values. The resample function requires the definition of a `DateTimeIndex`, which we already implemented by using the `index_col` argument when we loaded the data. The first (and only required) argument for the `resample` function is the rule defining the length of the time frame to which re-sampling applies. Here, we use `"A"` for annual statistics. For using bi-annual or 5-year periods, we could use the rule `"5A"`. More rules can be found at the [*pandas* docs](https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#offset-aliases). 
+Flood event recurrence intervals result from statistics of the annual maximum discharge. Therefore, use [*pandas*' `resample`](https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.resample.html) function to find annual maximum values. The resample function requires the definition of a `DateTimeIndex`, which we already implemented by using the `index_col` argument when we loaded the data. The first (and only required) argument for the `resample` function is the rule defining the length of the time frame to which re-sampling applies. Here, we use `"A"` for annual statistics. For using bi-annual or 5-year periods, we could use the rule `"5A"`. More rules can be found at the [*pandas* docs](https://pandas.pydata.org/pandas-docs/stable/user_guide/timeseries.html#offset-aliases).
 In addition, we use the argument `kind=period`, because we are only interested in the year in which the discharge occurred. Finally, we apply `.max()` to run *maximum* statistics on the data frame. Since the re-sampled dataframe is again a dataframe, all dataframe methods can also be applied to it. That is, instead of `max()` we can as well use `min()`, `sum()`, `median()`, `mean()` and so on ([review *pandas* dataframe methods](https://pandas.pydata.org/pandas-docs/stable/reference/frame.html)).
 
 ```python
@@ -113,7 +113,7 @@ plot_discharge(annual_max_df["year"], annual_max_df["Q (CMS)"], title="Wasserbur
 The exceedance probability *Pr* of a particular event within the observation period is:
 
 *Pr(i) = (n - i + 1) / (n + 1)*<br>
-where 
+where
 * *n* is the total number of observation years, and
 * *i* is the *rank* of the event.
 
@@ -151,14 +151,12 @@ After all, there is already a software that calculates return periods, freely av
 
 
 -------------- -----------------------------------------
-**HOMEWORK:**  Use the formulae in the provided workbook 
-                (ILIAS) to implement another distribution than *Weibull* (e.g., a *Gumbel* 
-                distribution) for extrapolating a 
+**HOMEWORK:**  Use the formulae in the provided workbook
+                (ILIAS) to implement another distribution than *Weibull* (e.g., a *Gumbel*
+                distribution) for extrapolating a
                 200, 500, and 1000-years flood.
-                Interpolations discharges of 2, 5, 10, 
+                Interpolations discharges of 2, 5, 10,
                 20, and 50-year flow events.
                 *Use loops and functions!*
-                
+
 -----------------------------------------------------------
-
-
